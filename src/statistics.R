@@ -1,7 +1,3 @@
-confusion_matrix <- function(preditions, true_labels){
-  return(table(preditions, true_labels))
-}
-
 fixCM <- function(cm) {
   if (nrow(cm) < ncol(cm)) {
     truePos <- match(rownames(cm), colnames(cm))
@@ -48,8 +44,6 @@ precision <- function(cm) {
     fp <- sum(cm[i,]) - tp
     if (!((fp == 0) && (tp == 0))) {
       preci <- c(preci, (tp / (tp + fp)))
-    } else {
-      preci <- c(preci, 0)
     }
   }
   return(mean(preci))
@@ -73,8 +67,6 @@ recall <- function(cm) {
     fn <- sum(cm[,i]) - tp
     if (!((fn == 0) && (tp == 0))) {
       recal <- c(recal, (tp / (tp + fn)))
-    } else {
-      recal <- c(recal, 0)
     }
   }
   return(mean(recal))
