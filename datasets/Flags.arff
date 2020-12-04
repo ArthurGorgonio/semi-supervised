@@ -66,7 +66,7 @@
 @attribute landmass=4 numeric
 @attribute landmass=5 numeric
 @attribute landmass=6 numeric
-@attribute 'Copy of religion' {0,1,2,3,4,5,6,7}
+@attribute class {0,1,2,3,4,5,6,7}
 
 @data
 1,0,0,0,0.028926,0.015873,0,0,0,0,0,0,0,0,0,1,0,0.214286,0.571429,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0.02,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,2
