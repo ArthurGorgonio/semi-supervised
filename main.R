@@ -122,7 +122,7 @@ for (dataset in datasets) {
   data <- get_database(dataset, "datasets")
   begin <- Sys.time()
   for (seed in seeds) {
-    ids_label <- holdout(data$class, 0.1, seed = seed)
+    ids_label <- holdout(data$class, 0.1, mode = "random", seed = seed)
     sup <- as.numeric(rownames(data)[ids_label$tr])
     data2 <- new_base(data, sup)
     predicted_labels <- self_training(data2, sup, data$class)
