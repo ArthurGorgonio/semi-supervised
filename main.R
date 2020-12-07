@@ -18,13 +18,13 @@ new_base <- function(labeled, train_id){
 }
 
 calculate_centroid <- function(labeled) {
-  classes <- levels(labeled$class)
-  columns <- ncol(labeled) - 1
-  centroid <- matrix(rep(0, columns), nrow = length(classes), ncol = columns)
+  classes <- droplevels(labeled$class)
+  features <- ncol(labeled) - 1
+  centroid <- matrix(rep(0, features), nrow = length(classes), ncol = features)
   rownames(centroid) <- classes
   for(cl in classes) {
     instances <- which(labeled$class == cl)
-    for (feature in 1:columns) {
+    for (feature in 1:features) {
       centroid[cl, feature] <- mean(labeled[instances, feature])
     }
   }
@@ -74,29 +74,28 @@ select_instances <- function(unlabeled, centroids, threshold) {
 self_training <- function(data, sup, correct_label, max_its = 100) {
   it <- 0
   total_intances <- nrow(data)
-  aux <- pre_processing(data)
   class_pos <- match("class", colnames(data))
-  centroids <- calculate_centroid(aux[sup,])
-  threshold <- calculate_threshold(aux[sup, -class_pos], centroids)
+  centroids <- calculate_centroid(data[sup,])
+  threshold <- calculate_threshold(data[sup, -class_pos], centroids)
   threshold_old <- -1
   while ((it < max_its) && (length(sup) < total_intances) &&
          (threshold_old != threshold)) {
     it <- it + 1
-    selected <- select_instances(aux[-sup, -class_pos], centroids, threshold)
+    selected <- select_instances(data[-sup, -class_pos], centroids, threshold)
     if (length(selected$label) > 0) {
-      aux$class[selected$id] <- selected$label
+      data$class[selected$id] <- selected$label
       sup <- union(sup, selected$id)
-      centroids <- calculate_centroid(aux[sup,])
+      centroids <- calculate_centroid(data[sup,])
       cat("\nIteration INFO!\n\n")
       cat("IT: ",it, '\n')
-      cat(sum(correct_label[selected$id] == aux$class[selected$id]),
+      cat(sum(correct_label[selected$id] == data$class[selected$id]),
           "/", length(selected$label))
     } else {
       threshold_old <- threshold
-      threshold <- calculate_threshold(aux[sup, -class_pos], centroids)
+      threshold <- calculate_threshold(data[sup, -class_pos], centroids)
     }
   }
-  return (aux$class)
+  return (data$class)
 }
 
 
